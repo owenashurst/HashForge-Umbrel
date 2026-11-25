@@ -29,6 +29,7 @@ export APP_BITCOIN_RPC_PASS="smoke-test-rpc-password"
 export APP_BITCOIN_ZMQ_HASHBLOCK_PORT="28332"
 export APP_HASHFORGE_POOL_POSTGRES_PASSWORD="smoke-test-postgres-password"
 export APP_HASHFORGE_POOL_REDIS_PASSWORD="smoke-test-redis-password"
+export APP_PASSWORD="smoke-test-app-password"
 export SMOKE_BITCOIN_IMAGE="${SMOKE_BITCOIN_IMAGE:-hashforge-bitcoind}"
 
 # Paths are given relative to the repository so that they mean the same to Docker on every system.
@@ -87,6 +88,15 @@ grep --quiet '"solo"' <<< "$pools" || fail "the solo pool is missing from /api/p
 connect="$(curl --silent --fail --max-time 10 "http://127.0.0.1:${SMOKE_WEB_PORT}/connect")" || fail "the Connect page did not load"
 # Only the host and port are matched: the page writes the "+" of stratum+tcp as an HTML entity.
 grep --quiet '//umbrel.local:3342' <<< "$connect"     || fail "the Connect page does not show the Umbrel's address and the solo port; it shows: $(grep --only-matching 'tcp://[^<]*' <<< "$connect" | head -n 5)"
+
+# Other apps share the pool's network on an Umbrel, so the admin page must ask for the app's password.
+admin="http://127.0.0.1:${SMOKE_WEB_PORT}/admin"
+status="$(curl --silent --output /dev/null --write-out '%{http_code}' --max-time 10 "$admin")"
+[ "$status" = "401" ] || fail "the admin page answered $status without a password; it should ask for one (401)"
+status="$(curl --silent --output /dev/null --write-out '%{http_code}' --max-time 10 --user "admin:wrong" "$admin")"
+[ "$status" = "401" ] || fail "the admin page answered $status to a wrong password; it should refuse (401)"
+status="$(curl --silent --output /dev/null --write-out '%{http_code}' --max-time 10 --user "admin:${APP_PASSWORD}" "$admin")"
+[ "$status" = "200" ] || fail "the admin page answered $status to the right password; it should open (200)"
 
 # The Stratum port must accept a miner on the port the package publishes.
 # shellcheck disable=SC2016 # The script is meant to be expanded inside the container, not here.

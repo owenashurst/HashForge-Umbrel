@@ -1,6 +1,14 @@
 # Stands in for the parts of umbrelOS the package relies on, so the package's own compose file can be
 # started on any machine with Docker. It is a rough check, not a substitute for testing on an Umbrel.
 
+# The same address range as an Umbrel's app network, so that a request from this machine reaches the pool
+# from inside the range the package allows to open the admin page, as Umbrel's proxy does.
+networks:
+  default:
+    ipam:
+      config:
+        - subnet: ${NETWORK_IP}/16
+
 services:
   # umbrelOS replaces this service with its own proxy; here it only has to exist.
   app_proxy:

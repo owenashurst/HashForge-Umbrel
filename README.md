@@ -42,10 +42,10 @@ The Bitcoin node is the one your Umbrel already runs; the app does not download 
   what fits within Bitcoin Core's default. The ten with the most work are paid; in a PPLNS pool the
   others stay in the window for later blocks.
 - **Settings are changed from the admin page**, not from a settings file.
-- **Anything on your Umbrel's app network can open the admin page.** The admin page has no password of
-  its own. It is not published outside your Umbrel and Umbrel's login protects it from other people,
-  but other apps installed on the same Umbrel share a network with the pool and could reach it. Only
-  install apps you trust alongside it.
+- **The admin page asks for a password.** Umbrel's login protects the whole app from other people, but
+  other apps installed on the same Umbrel share a network with the pool. So the admin page also asks
+  for the app's own password, which umbrelOS creates for each install: right-click the app's icon and
+  choose **Show default credentials**. Any user name works.
 
 ## Releasing an update
 

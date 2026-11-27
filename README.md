@@ -32,7 +32,9 @@ The Bitcoin node is the one your Umbrel already runs; the app does not download 
   address as the miner's user name; anything after a dot is the worker's name.
 - **Ports 3337 to 3341** are free for shared pools (PPLNS, proportional, finder bonus), which you add
   from the pool's admin page at `/admin`.
-- **The web interface** is behind your Umbrel login, like any other Umbrel app.
+- **The web interface** is behind your Umbrel login, like any other Umbrel app. The read-only JSON API
+  under `/api` is the exception, so that other apps (a phone app following the pool, say) can read the
+  pool's statistics without signing in to Umbrel.
 
 ## Differences from HashForge on plain Docker
 

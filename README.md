@@ -59,6 +59,9 @@ The Bitcoin node is the one your Umbrel already runs; the app does not download 
    describe the change in `releaseNotes`.
 4. Push to `main`. Umbrels that have this store added are offered the update.
 
+A change to the package alone, with the same pool image, still needs a new `version` or nobody is
+offered it: add a revision to the current one, as in `0.1.7-1`.
+
 ## The official Umbrel App Store
 
 The package is written to the official store's rules. `tools/official-package.sh <folder>` writes it
